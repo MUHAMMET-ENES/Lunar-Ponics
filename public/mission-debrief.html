@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#000000" />
+  <title>LUNAR-PONICS // CLASSIFIED · MISSION DEBRIEF · DAY 090</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --g:   #00FF41;
+      --gd:  rgba(0,255,65,.28);
+      --gg:  rgba(0,255,65,.55);
+      --cy:  #00CFFF;
+      --au:  #FFD700;
+      --rd:  #FF4141;
+      --or:  #FF9500;
+      --msg: #b8ffc6;
+    }
+
+    html { background: #000; overflow-x: hidden; }
+
+    body {
+      background: #000;
+      color: var(--g);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.75;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* SCANLINES */
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9000;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,255,65,.017) 2px, rgba(0,255,65,.017) 4px
+      );
+    }
+
+    /* VIGNETTE */
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 8999;
+      background: radial-gradient(ellipse at 50% 50%, transparent 42%, rgba(0,0,0,.78) 100%);
+    }
+
+    /* SCREEN FLICKER */
+    @keyframes sf {
+      0%,93%,100% { opacity:1 }
+      94% { opacity:.91 } 96% { opacity:.82 } 97.5% { opacity:.95 }
+    }
+    .flicker { animation: sf 14s infinite; }
+
+    /* ═══ GLOW UTILITIES ═══ */
+    .g1  { text-shadow: 0 0 8px var(--g), 0 0 18px var(--gg); }
+    .g2  { text-shadow: 0 0 12px var(--g), 0 0 30px var(--g), 0 0 55px var(--gg); }
+    .gc  { color: var(--cy); text-shadow: 0 0 8px var(--cy), 0 0 22px rgba(0,207,255,.5); }
+    .ga  { color: var(--au); text-shadow: 0 0 10px var(--au), 0 0 28px rgba(255,215,0,.45); }
+    .go  { color: var(--or); text-shadow: 0 0 8px var(--or); }
+    .gr  { color: var(--rd); text-shadow: 0 0 8px var(--rd); }
+    .gd  { color: var(--gd); }
+
+    /* ═══ LINE STYLE CLASSES ═══ */
+    .l-sys  { color: var(--cy); text-shadow: 0 0 7px var(--cy); }
+    .l-hdr  { color: var(--g);  font-weight: 700; text-shadow: 0 0 12px var(--g), 0 0 32px var(--gg); }
+    .l-au   { color: var(--au); text-shadow: 0 0 8px var(--au), 0 0 18px rgba(255,215,0,.35); }
+    .l-au-d { color: rgba(255,215,0,.55); }
+    .l-msg  { color: var(--msg); text-shadow: 0 0 4px rgba(0,255,65,.3); }
+    .l-hi   { color: var(--g);  font-weight: 700; text-shadow: 0 0 10px var(--g), 0 0 28px var(--gg); }
+    .l-ok   { color: var(--g);  font-weight: 700; text-shadow: 0 0 10px var(--g), 0 0 25px var(--gg); }
+    .l-warn { color: var(--or); text-shadow: 0 0 8px var(--or); }
+    .l-dim  { color: var(--gd); }
+    .l-div  { color: rgba(0,255,65,.22); }
+    .l-hero {
+      color: var(--g); font-size: 16px; font-weight: 800; letter-spacing: .04em;
+      text-shadow: 0 0 14px var(--g), 0 0 40px var(--g), 0 0 80px var(--gg), 0 0 120px rgba(0,255,65,.2);
+      padding: 4px 0;
+    }
+
+    /* ═══ BLINK CURSOR ═══ */
+    @keyframes cur { 0%,100% { opacity:1 } 50% { opacity:0 } }
+    .cur { animation: cur .85s step-end infinite; }
+
+    /* ═══ DECRYPT BUTTON ═══ */
+    @keyframes dbp {
+      0%,100% {
+        box-shadow: 0 0 14px var(--g), 0 0 36px var(--gg);
+        text-shadow: 0 0 10px var(--g), 0 0 22px var(--g);
+      }
+      50% {
+        box-shadow: 0 0 28px var(--g), 0 0 75px var(--gg), 0 0 110px rgba(0,255,65,.18);
+        text-shadow: 0 0 18px var(--g), 0 0 45px var(--g), 0 0 80px rgba(0,255,65,.4);
+      }
+    }
+    #dBtn {
+      animation: dbp 2.6s ease-in-out infinite;
+      border: 1px solid var(--g);
+      background: rgba(0,255,65,.04);
+      color: var(--g);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .18em;
+      padding: 20px 38px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      position: relative; z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .2s, transform .1s;
+    }
+    #dBtn:active { transform: scale(.96); background: rgba(0,255,65,.1); }
+
+    /* ═══ PULSE RINGS ═══ */
+    @keyframes ring {
+      0%   { transform: translate(-50%,-50%) scale(1); opacity: .55; }
+      100% { transform: translate(-50%,-50%) scale(3.4); opacity: 0; }
+    }
+    .ring {
+      position: absolute; left: 50%; top: 50%;
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 1px solid var(--g);
+      animation: ring 3.2s ease-out infinite;
+      pointer-events: none;
+    }
+    .ring:nth-of-type(2) { animation-delay: 1.06s; }
+    .ring:nth-of-type(3) { animation-delay: 2.13s; }
+
+    /* ═══ GLITCH ═══ */
+    @keyframes gl {
+      0%,88%,100% { clip-path: none; transform: none; }
+      89%  { clip-path: inset(15% 0 55% 0); transform: translateX(-3px); }
+      91%  { clip-path: inset(72% 0 8%  0); transform: translateX(4px);  }
+      93%  { clip-path: none; transform: none; }
+    }
+    .glitch { animation: gl 9s infinite; }
+
+    /* ═══ SIGNAL BARS ═══ */
+    @keyframes sb1 { 0%,100%{height:5px}  50%{height:13px} }
+    @keyframes sb2 { 0%,100%{height:9px}  33%{height:4px}  }
+    @keyframes sb3 { 0%,100%{height:13px} 66%{height:5px}  }
+    @keyframes sb4 { 0%,100%{height:7px}  25%{height:16px} }
+    @keyframes sb5 { 0%,100%{height:16px} 75%{height:7px}  }
+
+    /* ═══ PROGRESS BAR ═══ */
+    .pb-wrap {
+      display: inline-flex; align-items: center; gap: 8px;
+      vertical-align: middle;
+    }
+    .pb-track {
+      display: inline-block;
+      width: 110px; height: 7px;
+      background: rgba(0,255,65,.1);
+      border: 1px solid rgba(0,255,65,.28);
+      border-radius: 2px; overflow: hidden;
+    }
+    .pb-fill {
+      display: block; height: 100%;
+      background: var(--g);
+      box-shadow: 0 0 6px var(--g);
+      width: 0%; transition: none;
+      border-radius: 2px;
+    }
+    .pb-pct { font-size: 10px; color: var(--g); text-shadow: 0 0 5px var(--g); min-width: 34px; }
+
+    /* ═══ FLASH OVERLAY ═══ */
+    #flash {
+      position: fixed; inset: 0;
+      background: rgba(0,255,65,.06);
+      pointer-events: none; z-index: 7000;
+      opacity: 0; transition: opacity .08s;
+    }
+
+    /* ═══ SCROLLBAR ═══ */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--gd); border-radius: 2px; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 480px) {
+      body { font-size: 11.5px; }
+      #dBtn { font-size: 12px; padding: 16px 26px; letter-spacing: .13em; }
+      .l-hero { font-size: 14px; }
+    }
+    @media (max-width: 360px) {
+      body { font-size: 10.5px; }
+      #dBtn { font-size: 11px; padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body class="flicker">
+
+<div id="flash"></div>
+
+<div id="splash" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:500;padding:20px;">
+
+  <div class="gd" style="font-size:8.5px;letter-spacing:5px;margin-bottom:6px;text-align:center;">
+    ▓ CLASSIFICATION: COSMIC TOP SECRET ▓
+  </div>
+
+  <div class="gc" style="font-size:10.5px;letter-spacing:5px;margin-bottom:4px;text-align:center;">
+    TÜRKIYE UZAY AJANSI — TUA
+  </div>
+
+  <div class="glitch g2" style="font-size:17px;letter-spacing:7px;font-weight:800;text-align:center;margin-bottom:6px;">
+    LUNAR-PONICS
+  </div>
+  <div class="g1" style="font-size:9px;letter-spacing:5px;text-align:center;margin-bottom:36px;">
+    MISSION DEBRIEF ARCHIVE · DAY 090
+  </div>
+
+  <pre style="font-size:9.5px;line-height:1.35;color:rgba(0,255,65,.32);text-shadow:0 0 14px var(--g);letter-spacing:.5px;text-align:center;margin-bottom:32px;font-family:'JetBrains Mono',monospace;">
+       . · . · . · .
+    · ░░░░░░░░░░░ ·
+   . ░░░░░░░░░░░░░ .
+   · ░░░░░░░░░░░░░ ·
+    · ░░░░░░░░░░░ ·
+       · · · · ·</pre>
+
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:36px;">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <button id="dBtn">[ DECRYPT MISSION LOG ]</button>
+  </div>
+
+  <div class="gd" style="font-size:8.5px;letter-spacing:3px;text-align:center;line-height:2.1;max-width:300px;">
+    AUTHORIZED PERSONNEL ONLY<br/>
+    BIOMETRIC VERIFICATION ACTIVE<br/>
+    UPLINK: LUNAR-RELAY-SAT-7
+  </div>
+
+  <div style="position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:center;align-items:flex-end;gap:3px;height:22px;">
+    <span style="font-size:8px;letter-spacing:2px;color:var(--gd);align-self:center;margin-right:5px;">SIG</span>
+    <div style="width:3px;background:var(--g);box-shadow:0 0 4px var(--g);animation:sb1 1.1s ease-in-out infinite;"></div>
+    <div style="width:3px;background:var(--g);box-shadow:0 0 4px var(--g);animation:sb2 1.3s ease-in-out infinite;"></div>
+    <div style="width:3px;background:var(--g);box-shadow:0 0 4px var(--g);animation:sb3 0.9s ease-in-out infinite;"></div>
+    <div style="width:3px;background:var(--g);box-shadow:0 0 4px var(--g);animation:sb4 1.5s ease-in-out infinite;"></div>
+    <div style="width:3px;background:var(--g);box-shadow:0 0 4px var(--g);animation:sb5 1.1s ease-in-out infinite;"></div>
+    <span style="font-size:8px;letter-spacing:2px;color:var(--g);align-self:center;margin-left:5px;text-shadow:0 0 5px var(--g);">LOCK</span>
+  </div>
+</div>
+
+<div id="term" style="display:none;min-height:100vh;">
+
+  <div style="position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(0,0,0,.94);border-bottom:1px solid rgba(0,255,65,.14);z-index:100;backdrop-filter:blur(4px);">
+    <div class="g1" style="font-size:10px;letter-spacing:3px;font-weight:700;">
+      LUNAR-PONICS<span style="color:rgba(0,255,65,.3);"> //</span> MISSION DEBRIEF
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="gc" style="font-size:9px;letter-spacing:2px;" id="clock">UTC 00:00:00</div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 6px var(--g);animation:cur 1.1s infinite;"></div>
+        <span style="font-size:8px;letter-spacing:2px;color:var(--g);">LIVE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flicker" style="max-width:700px;margin:0 auto;padding:62px 16px 50px;">
+    <div id="out"></div>
+    <div id="cur-line" style="margin-top:3px;">
+      <span class="g1">&gt;</span> <span class="cur g2">█</span>
+    </div>
+
+    <div id="skip-hint" style="position:fixed;bottom:16px;left:0;right:0;text-align:center;font-size:9px;letter-spacing:2px;color:rgba(0,255,65,.2);z-index:200;pointer-events:none;">
+      TAP ANYWHERE TO ACCELERATE TRANSMISSION
+    </div>
+  </div>
+</div>
+
+<script>
+let audioCtx  = null;
+let audioGain = null;
+
+function initAudio() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const sr  = ctx.sampleRate;
+
+    const nBuf = ctx.createBuffer(2, sr * 5, sr);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = nBuf.getChannelData(ch);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const nSrc = ctx.createBufferSource();
+    nSrc.buffer = nBuf; nSrc.loop = true;
+
+    const bpf1 = ctx.createBiquadFilter();
+    bpf1.type = 'bandpass'; bpf1.frequency.value = 1700; bpf1.Q.value = 0.38;
+    const bpf2 = ctx.createBiquadFilter();
+    bpf2.type = 'bandpass'; bpf2.frequency.value = 800;  bpf2.Q.value = 0.5;
+    const hsc = ctx.createBiquadFilter();
+    hsc.type = 'highshelf'; hsc.frequency.value = 5500; hsc.gain.value = -14;
+
+    const staticG = ctx.createGain();
+    staticG.gain.setValueAtTime(0, ctx.currentTime);
+    staticG.gain.linearRampToValueAtTime(0.055, ctx.currentTime + 2.5);
+
+    nSrc.connect(bpf1); bpf1.connect(hsc); hsc.connect(staticG);
+    nSrc.connect(bpf2); bpf2.connect(staticG);
+    staticG.connect(ctx.destination);
+
+    const bBuf = ctx.createBuffer(1, sr * 6, sr);
+    const bd   = bBuf.getChannelData(0);
+    for (let i = 0; i < bd.length; i++) bd[i] = Math.random() * 2 - 1;
+    const bSrc = ctx.createBufferSource();
+    bSrc.buffer = bBuf; bSrc.loop = true;
+
+    const breathLPF = ctx.createBiquadFilter();
+    breathLPF.type = 'lowpass'; breathLPF.frequency.value = 320;
+    const breathG = ctx.createGain();
+    breathG.gain.setValueAtTime(0, ctx.currentTime);
+    breathG.gain.linearRampToValueAtTime(0.042, ctx.currentTime + 3.5);
+
+    const lfo  = ctx.createOscillator();
+    lfo.type   = 'sine'; lfo.frequency.value = 0.217;
+    const lfoG = ctx.createGain();
+    lfoG.gain.value = 0.032;
+
+    lfo.connect(lfoG);
+    lfoG.connect(breathG.gain);
+    bSrc.connect(breathLPF);
+    breathLPF.connect(breathG);
+    breathG.connect(ctx.destination);
+
+    const rumble  = ctx.createOscillator();
+    rumble.type   = 'sawtooth'; rumble.frequency.value = 49;
+    const rLPF    = ctx.createBiquadFilter();
+    rLPF.type     = 'lowpass'; rLPF.frequency.value = 85;
+    const rGain   = ctx.createGain();
+    rGain.gain.setValueAtTime(0, ctx.currentTime);
+    rGain.gain.linearRampToValueAtTime(0.016, ctx.currentTime + 4);
+
+    rumble.connect(rLPF); rLPF.connect(rGain); rGain.connect(ctx.destination);
+
+    nSrc.start(); bSrc.start(); lfo.start(); rumble.start();
+    audioGain = staticG;
+    schedCrackle();
+  } catch(e) {}
+}
+
+function schedCrackle() {
+  if (!audioCtx) return;
+  setTimeout(() => {
+    try {
+      const ctx = audioCtx;
+      const now = ctx.currentTime;
+      const len = Math.floor(ctx.sampleRate * (0.04 + Math.random() * 0.06));
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d   = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src  = ctx.createBufferSource(); src.buffer = buf;
+      const bpf  = ctx.createBiquadFilter();
+      bpf.type   = 'bandpass'; bpf.frequency.value = 1800 + Math.random() * 1200; bpf.Q.value = 2.5;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.14, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      src.connect(bpf); bpf.connect(g); g.connect(ctx.destination);
+      src.start(now);
+    } catch(e) {}
+    schedCrackle();
+  }, 3500 + Math.random() * 7500);
+}
+
+function startClock() {
+  const el = document.getElementById('clock');
+  function tick() {
+    if (!el) return;
+    const n = new Date();
+    const pad = v => String(v).padStart(2,'0');
+    el.textContent = `UTC ${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+const out = document.getElementById('out');
+let turbo = false;
+let seqDone = false;
+
+document.addEventListener('click', () => { if (!seqDone) turbo = true; });
+document.addEventListener('touchstart',() => {
+  if (!seqDone) turbo = true;
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}, { passive: true });
+
+function sleep(ms) {
+  if (turbo) return Promise.resolve();
+  return new Promise(r => setTimeout(r, ms));
+}
+
+function appendLine(html, cls = '', style = '') {
+  const div = document.createElement('div');
+  if (cls)   div.className = cls;
+  if (style) div.style.cssText = style;
+  div.innerHTML = html;
+  out.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  return div;
+}
+
+async function typeLine(text, cls = '', style = '', spd = 28) {
+  const div = document.createElement('div');
+  if (cls)   div.className = cls;
+  if (style) div.style.cssText = style;
+  out.appendChild(div);
+
+  if (turbo) {
+    div.textContent = text;
+    div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return div;
+  }
+
+  for (let i = 0; i < text.length; i++) {
+    div.textContent += text[i];
+    div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    await new Promise(r => setTimeout(r, Math.max(1, spd + (Math.random() * spd * 0.5 - spd * 0.15))));
+  }
+  return div;
+}
+
+async function progressLine(labelBefore, labelAfter, dur) {
+  const div = document.createElement('div');
+  div.className = 'l-sys';
+  out.appendChild(div);
+  div.textContent = labelBefore + ' ';
+  const wrap = document.createElement('span'); wrap.className = 'pb-wrap';
+  const track = document.createElement('span'); track.className = 'pb-track';
+  const fill = document.createElement('span'); fill.className = 'pb-fill';
+  const pct = document.createElement('span'); pct.className = 'pb-pct'; pct.textContent = ' 0%';
+  track.appendChild(fill); wrap.appendChild(track); wrap.appendChild(pct);
+  div.appendChild(wrap);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+  if (turbo) {
+    fill.style.width = '100%'; pct.textContent = ' 100%';
+    wrap.innerHTML = `<span class="l-ok"> ✓ ${labelAfter}</span>`;
+    return;
+  }
+
+  const start = performance.now();
+  await new Promise(resolve => {
+    function frame() {
+      const elapsed = performance.now() - start;
+      const p = Math.min(100, (elapsed / dur) * 100);
+      fill.style.width = p + '%'; pct.textContent = ' ' + Math.round(p) + '%';
+      if (p < 100) requestAnimationFrame(frame);
+      else { wrap.innerHTML = `<span class="l-ok"> ✓ ${labelAfter}</span>`; resolve(); }
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+async function flashScreen() {
+  const f = document.getElementById('flash');
+  f.style.opacity = '1'; await sleep(60); f.style.opacity = '0';
+}
+
+async function runSequence() {
+  await sleep(300);
+  await typeLine('> INITIALIZING UPLINK PROTOCOL v3.7 ...', 'l-sys', '', 18);
+  await progressLine('> SIGNAL ACQUISITION', 'SIGNAL LOCKED  384,400 km', 1500);
+  await typeLine('> ACCESS GRANTED ─────────────────── ✓ AUTHENTICATED', 'l-ok', '', 20);
+  await sleep(500);
+  appendLine('&nbsp;');
+
+  await typeLine('═══════════════════════════════════════════════════', 'l-div', '', 4);
+  await typeLine('  SECURE UPLINK ESTABLISHED', 'l-hdr', '', 44);
+  await typeLine('  ACCESSING LUNAR-PONICS BIO-NODE ALPHA...', 'l-hdr', 'font-size:13px', 33);
+  await typeLine('═══════════════════════════════════════════════════', 'l-div', '', 4);
+  appendLine('&nbsp;');
+
+  await typeLine('  MISSION LOG    :  DAY 090', 'l-au', '', 38);
+  await typeLine('  COMMANDER      :  Ali Qushji', 'l-au', '', 38);
+  await typeLine('                    (Legacy Commander / TUA Expedition Team)', 'l-au-d', 'font-size:11px', 16);
+  await typeLine('  LOCATION       :  Lunar Gateway / Module 1', 'l-au', '', 33);
+  await typeLine('  RECEIVER       :  TUA — Türkiye Uzay Ajansı', 'l-au', '', 33);
+  appendLine('&nbsp;');
+  await typeLine('═══════════════════════════════════════════════════', 'l-div', '', 4);
+  appendLine('&nbsp;');
+
+  await typeLine('> BEGIN TRANSMISSION ──────────────────────────────', 'l-sys', '', 20);
+  appendLine('&nbsp;');
+
+  await typeLine('  "Dünya\'dan 384.000 kilometre uzaktan,', 'l-msg', '', 38);
+  await typeLine('   karanlığın içinden tüm Türkiye\'ye', 'l-msg', '', 38);
+  await typeLine('   kucak dolusu selamlar!"', 'l-msg', 'font-style:italic', 38);
+  appendLine('&nbsp;');
+
+  await typeLine('  TUA\'ya ve Ankara\'daki yer kontrol', 'l-msg', '', 34);
+  await typeLine('  merkezimize müjdeli bir haberim var:', 'l-hi', '', 36);
+  appendLine('&nbsp;');
+
+  await typeLine('  Lunar-Ponics projesi 90 günlük', 'l-hi', '', 40);
+  await typeLine('  görevini kusursuz bir şekilde tamamladı.', 'l-hi', 'font-weight:700', 40);
+  appendLine('&nbsp;');
+
+  await typeLine('  Simülasyon boyunca zorlu krizler atlattık,', 'l-msg', '', 34);
+  await typeLine('  ancak sistemimiz bir an bile pes etmedi.', 'l-msg', '', 34);
+  appendLine('&nbsp;');
+
+  await typeLine('  Soluduğumuz hava ve içtiğimiz su,', 'l-msg', '', 34);
+  await typeLine('  içerideki bitkilerimiz sayesinde tamamen', 'l-msg', '', 34);
+  await typeLine('  otonom bir döngüye oturdu.', 'l-msg', '', 34);
+  appendLine('&nbsp;');
+
+  await typeLine('  Biz bugün Lunar-Ponics sayesinde', 'l-hi', '', 42);
+  await typeLine('  Ay\'da sadece hayatta kalmadık...', 'l-hi', '', 42);
+  await sleep(1000);
+  appendLine('&nbsp;');
+
+  await flashScreen();
+  await typeLine('  Ay\'da gerçekten YAŞAMAYI başardık.', 'l-hero', '', 55);
+  appendLine('&nbsp;');
+
+  await typeLine('  İnsanlığın yeni evinden sevgilerle.', 'l-msg', 'font-style:italic', 38);
+  await typeLine('  Görev başarılı.', 'l-ok', 'font-weight:700', 58);
+  await typeLine('  İletişim sonlanıyor."', 'l-dim', '', 36);
+  appendLine('&nbsp;');
+
+  await typeLine('> END TRANSMISSION ────────────────────────────────', 'l-sys', '', 20);
+  await typeLine('═══════════════════════════════════════════════════', 'l-div', '', 4);
+  appendLine('&nbsp;');
+
+  await typeLine('  MISSION STATUS      [██████████]  SUCCESS', 'l-ok', '', 30);
+  await typeLine('  90-DAY CYCLE        [██████████]  COMPLETE', 'l-ok', '', 28);
+  await typeLine('  CREW SURVIVAL RATE          3/3  CONFIRMED', 'l-ok', '', 28);
+  appendLine('&nbsp;');
+  await typeLine('> SECURE CHANNEL TERMINATING...', 'l-warn', '', 26);
+
+  seqDone = true;
+  document.getElementById('skip-hint').style.display = 'none';
+  if (audioGain) audioGain.gain.linearRampToValueAtTime(0.025, audioCtx.currentTime + 6);
+}
+
+document.getElementById('dBtn').addEventListener('click', function() {
+  initAudio();
+  const splash = document.getElementById('splash');
+  splash.style.transition = 'opacity 0.9s ease';
+  splash.style.opacity = '0';
+  setTimeout(() => {
+    splash.style.display = 'none';
+    const term = document.getElementById('term');
+    term.style.display = 'block';
+    term.style.opacity = '0';
+    term.style.transition = 'opacity 0.55s ease';
+    requestAnimationFrame(() => { term.style.opacity = '1'; });
+    startClock();
+    setTimeout(runSequence, 700);
+  }, 900);
+});
+
+window.addEventListener('touchstart', () => {
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}, { once: true });
+</script>
+</body>
+</html>

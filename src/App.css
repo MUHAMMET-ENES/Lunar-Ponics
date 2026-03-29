@@ -1,0 +1,210 @@
+/* ══════════════════════════════════════════════════════════════════
+   App.css — Lunar-Ponics Alpha-1
+   Extended with Hard Engineering module styles
+════════════════════════════════════════════════════════════════════ */
+
+/* ── Cyber-physical QR frame — terminal phosphor (#00FF41) ─────── */
+.qr-container {
+  position: relative;
+  padding: 14px 16px 18px;
+  border: 1px solid rgba(0, 255, 65, 0.5);
+  border-radius: 12px;
+  background: linear-gradient(
+    145deg,
+    rgba(5, 9, 17, 0.95) 0%,
+    rgba(8, 22, 14, 0.88) 50%,
+    rgba(5, 9, 17, 0.95) 100%
+  );
+  box-shadow:
+    0 0 22px rgba(0, 255, 65, 0.28),
+    0 0 48px rgba(0, 255, 65, 0.12),
+    inset 0 0 28px rgba(0, 255, 65, 0.08);
+}
+
+.qr-container::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 65, 0.4),
+    transparent 40%,
+    rgba(0, 255, 65, 0.15) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.qr-label {
+  margin: 0 0 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  color: #00ff41;
+  text-align: center;
+  text-shadow:
+    0 0 10px rgba(0, 255, 65, 0.95),
+    0 0 24px rgba(0, 255, 65, 0.45);
+}
+
+.qr-image {
+  display: block;
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid #00ff41;
+  box-shadow:
+    0 0 18px rgba(0, 255, 65, 0.45),
+    inset 0 0 12px rgba(0, 255, 65, 0.06);
+  background: #050911;
+}
+
+.qr-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: rgba(0, 255, 65, 0.45);
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.35);
+}
+
+/* ── Sensor slider ──────────────────────────────────────────────── */
+.sensor-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  background: #162844;
+  transition: background 0.2s;
+}
+
+.sensor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  box-shadow: 0 0 8px currentColor;
+  transition: transform 0.15s;
+}
+
+.sensor-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.sensor-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ── Hard Engineering tab toggle buttons ────────────────────────── */
+.eng-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  transition: all 0.18s ease;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.eng-toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.eng-toggle:hover::after {
+  opacity: 0.06;
+}
+
+.eng-toggle.active::after {
+  opacity: 0.10;
+}
+
+/* ── Anomaly alert pulse ────────────────────────────────────────── */
+@keyframes anomaly-pulse {
+  0%,100% {
+    box-shadow: 0 0 8px rgba(255, 45, 120, 0.4);
+    border-color: rgba(255, 45, 120, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(255, 45, 120, 0.9), 0 0 48px rgba(255, 45, 120, 0.3);
+    border-color: rgba(255, 45, 120, 1.0);
+  }
+}
+
+.anomaly-alert {
+  animation: anomaly-pulse 1.6s ease-in-out infinite;
+}
+
+/* ── Mesh compensation pulse (green) ────────────────────────────── */
+@keyframes mesh-pulse {
+  0%,100% { box-shadow: 0 0 8px rgba(0, 207, 255, 0.3); }
+  50%     { box-shadow: 0 0 22px rgba(0, 207, 255, 0.7), 0 0 40px rgba(0, 207, 255, 0.2); }
+}
+
+.mesh-active {
+  animation: mesh-pulse 2.2s ease-in-out infinite;
+}
+
+/* ── Status readout pill ────────────────────────────────────────── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ── PID meter bar ──────────────────────────────────────────────── */
+.pid-bar-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #0f1e35;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.pid-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
